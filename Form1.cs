@@ -7,9 +7,23 @@ namespace BUS_ORGANIZATION
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void registration_Click(object sender, EventArgs e)
         {
-            panel1.Hide();
+            logpanel.Hide();
+            regpanel.Show();
+        }
+
+        private void goback_Click(object sender, EventArgs e)
+        {
+            logpanel.Show();
+            regpanel.Hide();
+        }
+
+        private void logIn_Click(object sender, EventArgs e)
+        {
+            String user = ltlogin.Text;
+            String passwd = ltpasswd.Text;
+            MySQLdb mySQLdb = new MySQLdb();
         }
     }
 }
