@@ -23,7 +23,17 @@ namespace BUS_ORGANIZATION
         {
             String user = ltlogin.Text;
             String passwd = ltpasswd.Text;
-            MySQLdb mySQLdb = new MySQLdb();
+            MySQLdb db = new MySQLdb();
+            db.CheckLogin(user, passwd);
+        }
+
+        private void registeracc_Click(object sender, EventArgs e)
+        {
+            String user = rtlogin.Text;
+            String passwd = rtpasswd.Text;
+            String passwdconf = rtpasswdconf.Text;
+            MySQLdb db = new MySQLdb();
+            db.AddUser(user, passwd, passwdconf);
         }
     }
 }

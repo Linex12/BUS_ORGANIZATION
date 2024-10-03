@@ -12,18 +12,20 @@ namespace BUS_ORGANIZATION
     {
         MySqlConnection connection;
         static string host = "localhost";
-        static string database = "bus_org";
+        static string port = "3307";
+        static string database = "bus_org_auto";
         static string user = "root";
-        static string password = "password";
+        static string password = "Development";
         public bool Open()
         {
             try
             {
                 connection = new MySqlConnection(
                     "server=" + host +
-                    ";database=" + database +
+                    ";port=" + port +
                     ";username=" + user +
-                    ";password=" + password);
+                    ";password=" + password +
+                    ";database=" + database);
                 connection.Open();
                 return true;
             }
@@ -51,9 +53,14 @@ namespace BUS_ORGANIZATION
         {
             try
             {
+                Open();
                 MySqlDataAdapter adapter = new MySqlDataAdapter();
                 DataTable table = new DataTable();
-                MySqlCommand command = new MySqlCommand("Сюда следует заменить на команду");
+                MySqlCommand command = new MySqlCommand(
+                    "SELECT * FROM users WHERE login = @login AND password = @passwd"
+                    );
+                command.Parameters.Add("@login", MySqlDbType.VarChar).Value = login;
+                command.Parameters.Add("@passwd", MySqlDbType.VarChar).Value = passwd;
                 adapter.SelectCommand = command;
                 adapter.Fill(table);
                 if (table.Rows.Count == 1)
@@ -71,13 +78,22 @@ namespace BUS_ORGANIZATION
             {
                 MessageBox.Show("Ошибка входа\nПричина: " + e.Message);
             }
+            Close();
             return false;
         }
         public bool AddUser(String login, String passwd, String passwdconf)
         {
             try
             {
-
+                if (passwd != passwdconf)
+                {
+                    throw new Exception("Passwords do not match");
+                }
+                MySqlCommand command = new MySqlCommand(
+                    "INSERT INTO user (login, password) VALUES (@login, @passwd)"
+                    );
+                command.Parameters.Add("@login", MySqlDbType.VarChar).Value = login;
+                command.Parameters.Add("@passwd", MySqlDbType.VarChar).Value = passwd;
             }
             catch (Exception e) 
             {

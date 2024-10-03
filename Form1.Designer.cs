@@ -148,6 +148,7 @@
             registeracc.TabIndex = 10;
             registeracc.Text = "Зарегистрироваться";
             registeracc.UseVisualStyleBackColor = true;
+            registeracc.Click += registeracc_Click;
             // 
             // rlpasswdconf
             // 
