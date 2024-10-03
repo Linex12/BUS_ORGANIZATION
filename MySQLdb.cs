@@ -57,8 +57,8 @@ namespace BUS_ORGANIZATION
                 MySqlDataAdapter adapter = new MySqlDataAdapter();
                 DataTable table = new DataTable();
                 MySqlCommand command = new MySqlCommand(
-                    "SELECT * FROM users WHERE login = @login AND password = @passwd"
-                    );
+                    "SELECT * FROM user WHERE username = @login AND password = @passwd",
+                    connection);
                 command.Parameters.Add("@login", MySqlDbType.VarChar).Value = login;
                 command.Parameters.Add("@passwd", MySqlDbType.VarChar).Value = passwd;
                 adapter.SelectCommand = command;
@@ -66,6 +66,7 @@ namespace BUS_ORGANIZATION
                 if (table.Rows.Count == 1)
                 {
                     MessageBox.Show("Пользователь залогинен");
+                    Close();
                     return true;
                 }
                 else if (table.Rows.Count == 0)
@@ -85,20 +86,28 @@ namespace BUS_ORGANIZATION
         {
             try
             {
+                Open();
                 if (passwd != passwdconf)
                 {
                     throw new Exception("Passwords do not match");
                 }
                 MySqlCommand command = new MySqlCommand(
-                    "INSERT INTO user (login, password) VALUES (@login, @passwd)"
-                    );
+                    "INSERT INTO user (username, password) VALUES (@login, @passwd)",
+                    connection);
                 command.Parameters.Add("@login", MySqlDbType.VarChar).Value = login;
                 command.Parameters.Add("@passwd", MySqlDbType.VarChar).Value = passwd;
+                if (command.ExecuteNonQuery() == 1)
+                    MessageBox.Show("Аккаунт был создан");
+                else
+                    throw new Exception("Incorrect SQL Query");
+                Close();
+                return true;
             }
             catch (Exception e) 
             {
                 MessageBox.Show("Ошибка регистрации пользователя\nПричина: " + e.Message);
             }
+            Close();
             return false;
         }
     }
