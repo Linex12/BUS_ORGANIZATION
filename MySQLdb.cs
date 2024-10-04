@@ -4,7 +4,10 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.VisualBasic.Logging;
 using MySql.Data.MySqlClient;
+using Mysqlx.Crud;
+using MySqlX.XDevAPI.Relational;
 
 namespace BUS_ORGANIZATION
 {
@@ -12,7 +15,7 @@ namespace BUS_ORGANIZATION
     {
         MySqlConnection connection;
         static string host = "localhost";
-        static string port = "3307";
+        static string port = "3306";
         static string database = "bus_org_auto";
         static string user = "root";
         static string password = "Development";
@@ -53,7 +56,9 @@ namespace BUS_ORGANIZATION
         {
             try
             {
-                Open();
+                if (!Open()) {
+                    return false;
+                }
                 MySqlDataAdapter adapter = new MySqlDataAdapter();
                 DataTable table = new DataTable();
                 MySqlCommand command = new MySqlCommand(
@@ -65,7 +70,6 @@ namespace BUS_ORGANIZATION
                 adapter.Fill(table);
                 if (table.Rows.Count == 1)
                 {
-                    MessageBox.Show("Пользователь залогинен");
                     Close();
                     return true;
                 }
@@ -86,7 +90,10 @@ namespace BUS_ORGANIZATION
         {
             try
             {
-                Open();
+                if (!Open())
+                {
+                    return false;
+                }
                 if (passwd != passwdconf)
                 {
                     throw new Exception("Passwords do not match");
@@ -106,6 +113,129 @@ namespace BUS_ORGANIZATION
             catch (Exception e) 
             {
                 MessageBox.Show("Ошибка регистрации пользователя\nПричина: " + e.Message);
+            }
+            Close();
+            return false;
+        }
+        public bool PrintTable(string tablename, DataTable table)
+        {
+            try
+            {
+                if (!Open())
+                {
+                    return false;
+                }
+                MySqlDataAdapter adapter = new MySqlDataAdapter();
+                MySqlCommand command = new MySqlCommand(
+                    "SELECT * FROM "+tablename,
+                    connection);
+                adapter.SelectCommand = command;
+                adapter.Fill(table);
+                Close();
+                return true;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Данные не заполнены\nПричина: " + e.Message);
+            }
+            Close();
+            return false;
+        }
+        public bool DeleteRow(string table, string column, string id)
+        {
+            try
+            {
+                if (!Open())
+                {
+                    return false;
+                }
+                MySqlCommand command = new MySqlCommand(
+                    "DELETE FROM " + table + " WHERE " + column + "=" + id,
+                    connection);
+                if (command.ExecuteNonQuery() != 1)
+                    throw new Exception("Строки не существует в базе данных");
+                Close();
+                return true;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Ошибка удаления строки\nПричина: " + e.Message);
+            }
+            Close();
+            return false;
+        }
+        public bool InsertRow(string table, string count)
+        {
+            try
+            {
+                if (!Open())
+                {
+                    return false;
+                }
+                MySqlCommand command1 = new MySqlCommand(
+                    "ALTER TABLE " + table + " AUTO_INCREMENT = " + count,
+                    connection);
+                if (command1.ExecuteNonQuery() != 0) 
+                    throw new Exception("что-то пошло не так при обнулении AUTO_INCREMENT");
+                MySqlCommand command2 = new MySqlCommand(
+                    "INSERT INTO "+table+" DEFAULT VALUES",
+                    connection);
+                if (command2.ExecuteNonQuery() != 1)
+                    throw new Exception("что-то пошло не так при добавлении строки");
+                Close();
+                return true;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Ошибка добавления строки\nПричина: " + e.Message);
+            }
+            Close();
+            return false;
+        }
+        public bool UpdateRow(string table,string primarykey, string column, string id, string value)
+        {
+            try
+            {
+                if (!Open())
+                {
+                    return false;
+                }
+                MySqlCommand command = new MySqlCommand(
+                    "UPDATE " + table + " SET " + column + "="+ value +" WHERE " + primarykey + "=" + id,
+                    connection);
+                if (command.ExecuteNonQuery() != 1)
+                    throw new Exception("Строки не существует в базе данных");
+                Close();
+                return true;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Ошибка изменения строки\nПричина: " + e.Message);
+            }
+            Close();
+            return false;
+        }
+        public bool ExecuteSQLScript(string script)
+        {
+            try
+            {
+                if (!Open())
+                {
+                    return false;
+                }
+                MySqlCommand command = new MySqlCommand(
+                    script,
+                    connection);
+                if (command.ExecuteNonQuery() == 1)
+                    MessageBox.Show("Команда выполнена успешно\n Текст команды:\n" + script);
+                else
+                    throw new Exception("Script is incorrect. Text\n" + script);
+                Close();
+                return true;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Ошибка изменения строки\nПричина: " + e.Message);
             }
             Close();
             return false;

@@ -24,7 +24,11 @@ namespace BUS_ORGANIZATION
             String user = ltlogin.Text;
             String passwd = ltpasswd.Text;
             MySQLdb db = new MySQLdb();
-            db.CheckLogin(user, passwd);
+            if (db.CheckLogin(user, passwd)) {
+                Hide();
+                Form2 form2 = new Form2();
+                form2.Show();
+            }
         }
 
         private void registeracc_Click(object sender, EventArgs e)

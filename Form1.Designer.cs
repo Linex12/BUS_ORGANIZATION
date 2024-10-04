@@ -83,13 +83,14 @@
             // 
             // logpanel
             // 
+            logpanel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             logpanel.Controls.Add(registration);
             logpanel.Controls.Add(logIn);
             logpanel.Controls.Add(lllogin);
             logpanel.Controls.Add(ltlogin);
             logpanel.Controls.Add(llpasswd);
             logpanel.Controls.Add(ltpasswd);
-            logpanel.Location = new Point(277, 12);
+            logpanel.Location = new Point(60, 60);
             logpanel.Name = "logpanel";
             logpanel.Size = new Size(166, 169);
             logpanel.TabIndex = 5;
@@ -204,7 +205,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(459, 268);
+            ClientSize = new Size(276, 268);
             Controls.Add(logpanel);
             Controls.Add(regpanel);
             Name = "Form1";
