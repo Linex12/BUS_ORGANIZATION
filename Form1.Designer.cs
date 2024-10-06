@@ -52,6 +52,7 @@
             // 
             ltpasswd.Location = new Point(58, 47);
             ltpasswd.Name = "ltpasswd";
+            ltpasswd.PasswordChar = '*';
             ltpasswd.Size = new Size(100, 23);
             ltpasswd.TabIndex = 0;
             // 
@@ -165,6 +166,7 @@
             // 
             rtpasswdconf.Location = new Point(156, 81);
             rtpasswdconf.Name = "rtpasswdconf";
+            rtpasswdconf.PasswordChar = '*';
             rtpasswdconf.Size = new Size(100, 23);
             rtpasswdconf.TabIndex = 9;
             // 
@@ -172,6 +174,7 @@
             // 
             rtpasswd.Location = new Point(156, 48);
             rtpasswd.Name = "rtpasswd";
+            rtpasswd.PasswordChar = '*';
             rtpasswd.Size = new Size(100, 23);
             rtpasswd.TabIndex = 8;
             // 
