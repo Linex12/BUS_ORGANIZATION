@@ -49,12 +49,17 @@
             textBox4 = new TextBox();
             button3 = new Button();
             label9 = new Label();
+            label10 = new Label();
+            textBox5 = new TextBox();
+            label11 = new Label();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
             // panel1
             // 
+            panel1.Controls.Add(textBox5);
+            panel1.Controls.Add(label10);
             panel1.Controls.Add(label7);
             panel1.Controls.Add(label6);
             panel1.Controls.Add(textBox3);
@@ -67,15 +72,15 @@
             panel1.Controls.Add(addrow);
             panel1.Controls.Add(listBox1);
             panel1.Controls.Add(label1);
-            panel1.Location = new Point(24, 54);
+            panel1.Location = new Point(12, 54);
             panel1.Name = "panel1";
-            panel1.Size = new Size(261, 512);
+            panel1.Size = new Size(273, 512);
             panel1.TabIndex = 0;
             // 
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(13, 421);
+            label7.Location = new Point(34, 417);
             label7.Name = "label7";
             label7.Size = new Size(105, 15);
             label7.TabIndex = 8;
@@ -84,7 +89,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(27, 392);
+            label6.Location = new Point(48, 388);
             label6.Name = "label6";
             label6.Size = new Size(91, 15);
             label6.TabIndex = 7;
@@ -92,21 +97,21 @@
             // 
             // textBox3
             // 
-            textBox3.Location = new Point(124, 418);
+            textBox3.Location = new Point(145, 414);
             textBox3.Name = "textBox3";
             textBox3.Size = new Size(100, 23);
             textBox3.TabIndex = 6;
             // 
             // textBox2
             // 
-            textBox2.Location = new Point(124, 389);
+            textBox2.Location = new Point(145, 385);
             textBox2.Name = "textBox2";
             textBox2.Size = new Size(100, 23);
             textBox2.TabIndex = 5;
             // 
             // button2
             // 
-            button2.Location = new Point(13, 365);
+            button2.Location = new Point(34, 361);
             button2.Name = "button2";
             button2.Size = new Size(211, 23);
             button2.TabIndex = 5;
@@ -117,7 +122,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(13, 230);
+            label4.Location = new Point(34, 226);
             label4.Name = "label4";
             label4.Size = new Size(98, 15);
             label4.TabIndex = 4;
@@ -125,7 +130,7 @@
             // 
             // textBox1
             // 
-            textBox1.Location = new Point(13, 248);
+            textBox1.Location = new Point(34, 244);
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(211, 79);
@@ -133,7 +138,7 @@
             // 
             // button1
             // 
-            button1.Location = new Point(13, 333);
+            button1.Location = new Point(34, 329);
             button1.Name = "button1";
             button1.Size = new Size(211, 26);
             button1.TabIndex = 4;
@@ -143,7 +148,7 @@
             // 
             // refresh
             // 
-            refresh.Location = new Point(63, 454);
+            refresh.Location = new Point(145, 450);
             refresh.Name = "refresh";
             refresh.Size = new Size(120, 27);
             refresh.TabIndex = 2;
@@ -153,7 +158,7 @@
             // 
             // addrow
             // 
-            addrow.Location = new Point(63, 487);
+            addrow.Location = new Point(145, 483);
             addrow.Name = "addrow";
             addrow.Size = new Size(120, 22);
             addrow.TabIndex = 2;
@@ -166,7 +171,7 @@
             listBox1.FormattingEnabled = true;
             listBox1.ItemHeight = 15;
             listBox1.Items.AddRange(new object[] { "Пользователи", "Роли", "Работники", "Должности", "Категории", "Автобусы", "Остановки", "Маршруты", "Перевозка", "Отчёт", "Работники, Должности, Категории", "Остановки в маршруте" });
-            listBox1.Location = new Point(27, 28);
+            listBox1.Location = new Point(48, 24);
             listBox1.Name = "listBox1";
             listBox1.Size = new Size(203, 184);
             listBox1.TabIndex = 1;
@@ -175,7 +180,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(63, 10);
+            label1.Location = new Point(84, 6);
             label1.Name = "label1";
             label1.Size = new Size(109, 15);
             label1.TabIndex = 1;
@@ -190,6 +195,7 @@
             dataGridView1.Size = new Size(610, 512);
             dataGridView1.TabIndex = 1;
             dataGridView1.CellValueChanged += dataGridView1_CellValueChanged;
+            dataGridView1.SelectionChanged += dataGridView1_SelectionChanged;
             dataGridView1.UserDeletingRow += dataGridView1_UserDeletingRow;
             // 
             // label2
@@ -254,11 +260,37 @@
             label9.TabIndex = 8;
             label9.Text = "Строка для запросов используется для DML операций (кроме SELECT)";
             // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(3, 456);
+            label10.Name = "label10";
+            label10.Size = new Size(136, 15);
+            label10.TabIndex = 9;
+            label10.Text = "Задать значения INSERT";
+            // 
+            // textBox5
+            // 
+            textBox5.Location = new Point(12, 482);
+            textBox5.Name = "textBox5";
+            textBox5.Size = new Size(125, 23);
+            textBox5.TabIndex = 9;
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(24, 630);
+            label11.Name = "label11";
+            label11.Size = new Size(501, 15);
+            label11.TabIndex = 9;
+            label11.Text = "Значеняи для INSERT задавать через запятую. Если есть строка то через двойные ковычки";
+            // 
             // Form2
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(930, 639);
+            ClientSize = new Size(930, 652);
+            Controls.Add(label11);
             Controls.Add(label9);
             Controls.Add(button3);
             Controls.Add(textBox4);
@@ -301,5 +333,8 @@
         private TextBox textBox4;
         private Button button3;
         private Label label9;
+        private TextBox textBox5;
+        private Label label10;
+        private Label label11;
     }
 }

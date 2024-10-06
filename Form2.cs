@@ -17,6 +17,9 @@ namespace BUS_ORGANIZATION
         private String primarykey;
         private int key_count;
         private uint roleid;
+        private int selectedindexrow;
+        private int selectedindexcol;
+        private string[] selectedvalues;
         private uint[] needroles;
         public Form2(uint roleid)
         {
@@ -119,35 +122,40 @@ namespace BUS_ORGANIZATION
 
         private void dataGridView1_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
-            int index = dataGridView1.CurrentRow.Index;
             MySQLdb mySQLdb = new MySQLdb();
             if (key_count == 1)
             {
-                String id = dataGridView1.Rows[index].Cells[primarykey].Value.ToString();
-                if (!mySQLdb.DeleteRow(tablename, primarykey, id))
+                if (!mySQLdb.DeleteRow(tablename, primarykey, selectedvalues[0]))
                     e.Cancel = true;
             }
-            else
+            else if (key_count == 2)
             {
-                MessageBox.Show("Таблицами с несколькими ключами следует управлять только запросами");
+                if (!mySQLdb.DeleteRow2keys(tablename, selectedvalues[0], selectedvalues[1]))
+                    e.Cancel = true;
+            }
+            else if (key_count == 3)
+            {
+                if (!mySQLdb.DeleteRow3keys(tablename, selectedvalues[0], selectedvalues[1], selectedvalues[2]))
+                    e.Cancel = true;
             }
         }
 
         private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            int rowindex = dataGridView1.CurrentCell.RowIndex;
-            int columnindex = dataGridView1.CurrentCell.ColumnIndex;
-            String column = dataGridView1.Columns[columnindex].HeaderText;
-            String value = dataGridView1.Rows[rowindex].Cells[columnindex].Value.ToString();
+            String column = dataGridView1.Columns[selectedindexcol].HeaderText;
+            String value = dataGridView1.Rows[selectedindexrow].Cells[selectedindexcol].Value.ToString();
             MySQLdb mySQLdb = new MySQLdb();
             if (key_count == 1)
             {
-                String id = dataGridView1.Rows[rowindex].Cells[primarykey].Value.ToString();
-                mySQLdb.UpdateRow(tablename, primarykey, column, id, value);
+                mySQLdb.UpdateRow(tablename, primarykey, column, selectedvalues[0], value);
             }
-            else
+            else if (key_count == 2)
             {
-                MessageBox.Show("Таблицами с несколькими ключами следует управлять только запросами");
+                mySQLdb.UpdateRow2keys(tablename, selectedvalues[0], selectedvalues[1], column, value);
+            }
+            else if (key_count == 3)
+            {
+                mySQLdb.UpdateRow3keys(tablename, selectedvalues[0], selectedvalues[1], selectedvalues[2], column, value);
             }
         }
 
@@ -155,7 +163,14 @@ namespace BUS_ORGANIZATION
         {
             String count = dataGridView1.RowCount.ToString();
             MySQLdb mySQLdb = new MySQLdb();
-            mySQLdb.InsertRow(tablename, count);
+            if (textBox5.Text == "")
+            {
+                mySQLdb.InsertRow(tablename, count);
+            }
+            else
+            {
+                mySQLdb.InsertRow(tablename, count, textBox5.Text);
+            }
             DataTable dt = new DataTable();
             mySQLdb.PrintTable(tablename, dt);
             dataGridView1.DataSource = dt;
@@ -189,6 +204,31 @@ namespace BUS_ORGANIZATION
         {
             MySQLdb mySQLdb = new MySQLdb();
             mySQLdb.ExecuteSQLScript(textBox4.Text);
+        }
+
+        private void dataGridView1_SelectionChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                selectedindexrow = dataGridView1.CurrentCell.RowIndex;
+                selectedindexcol = dataGridView1.CurrentCell.ColumnIndex;
+                if (key_count == 1)
+                    selectedvalues = [dataGridView1.CurrentRow.Cells[primarykey].Value.ToString()];
+                else if (key_count == 2)
+                    selectedvalues = [
+                        dataGridView1.CurrentRow.Cells["idRoute"].Value.ToString(),
+                    dataGridView1.CurrentRow.Cells["idBusStop"].Value.ToString()
+                        ];
+                else if (key_count == 3)
+                    selectedvalues = [
+                        dataGridView1.CurrentRow.Cells["idWorker"].Value.ToString(),
+                    dataGridView1.CurrentRow.Cells["idPosition"].Value.ToString(),
+                    dataGridView1.CurrentRow.Cells["idCategory"].Value.ToString()
+                        ];
+            }
+            catch (Exception ex) 
+            { 
+            }
         }
     }
 }

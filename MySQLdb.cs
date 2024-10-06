@@ -297,6 +297,29 @@ namespace BUS_ORGANIZATION
             Close();
             return false;
         }
+        public bool InsertRow(string table, string count, string values)
+        {
+            try
+            {
+                if (!Open())
+                {
+                    return false;
+                }
+                MySqlCommand command = new MySqlCommand(
+                    "INSERT INTO " + table + " VALUES (" + values + ")",
+                    connection);
+                if (command.ExecuteNonQuery() != 1)
+                    throw new Exception("Что-то пошло не так при добавлении строки");
+                Close();
+                return true;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Ошибка добавления строки\nПричина: " + e.Message);
+            }
+            Close();
+            return false;
+        }
         public bool UpdateRow(string table,string primarykey, string column, string id, string value)
         {
             try
