@@ -13,8 +13,8 @@ namespace BUS_ORGANIZATION
 {
     public partial class Form2 : Form
     {
-        private String tablename;
-        private String primarykey;
+        private string tablename;
+        private string primarykey;
         private int key_count;
         private uint roleid;
         private int selectedindexrow;
@@ -178,18 +178,32 @@ namespace BUS_ORGANIZATION
 
         private void refresh_Click(object sender, EventArgs e)
         {
-            MySQLdb mySQLdb = new MySQLdb();
-            DataTable dt = new DataTable();
-            mySQLdb.PrintTable(tablename, dt);
-            dataGridView1.DataSource = dt;
+            if (needroles.Contains<uint>(roleid))
+            {
+                MySQLdb mySQLdb = new MySQLdb();
+                DataTable dt = new DataTable();
+                mySQLdb.PrintTable(tablename, dt);
+                dataGridView1.DataSource = dt;
+            }
+            else
+            {
+                MessageBox.Show("Нет доступа к таблице");
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            MySQLdb mySQLdb = new MySQLdb();
-            DataTable dt = new DataTable();
-            mySQLdb.PrintTableWithParameters(tablename, dt, textBox1.Text);
-            dataGridView1.DataSource = dt;
+            if (needroles.Contains<uint>(roleid))
+            {
+                MySQLdb mySQLdb = new MySQLdb();
+                DataTable dt = new DataTable();
+                mySQLdb.PrintTableWithParameters(tablename, dt, textBox1.Text);
+                dataGridView1.DataSource = dt;
+            }
+            else
+            {
+                MessageBox.Show("Нет доступа к таблице");
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)

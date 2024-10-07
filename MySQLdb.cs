@@ -328,28 +328,33 @@ namespace BUS_ORGANIZATION
                 {
                     return false;
                 }
-                try
-                {
-                    MySqlCommand command = new MySqlCommand(
-                        "UPDATE " + table + " SET " + column + "=" + value + " WHERE " + primarykey + "=" + id,
-                        connection);
-                    if (command.ExecuteNonQuery() != 1)
-                        throw new Exception("Строки не существует в базе данных");
-                }
-                catch (Exception e)
-                {
-                    MySqlCommand command = new MySqlCommand(
-                        "UPDATE " + table + " SET " + column + "=\"" + value + "\" WHERE " + primarykey + "=" + id,
-                        connection);
-                    if (command.ExecuteNonQuery() != 1)
-                        throw new Exception("Строки не существует в базе данных");
-                }
+                MySqlCommand command = new MySqlCommand(
+                    "UPDATE " + table + " SET " + column + "=\"" + value + "\" WHERE " + primarykey + "=" + id,
+                    connection);
+                if (command.ExecuteNonQuery() != 1)
+                    throw new Exception("Строки не существует в базе данных");
                 Close();
                 return true;
             }
             catch (Exception e)
             {
-                MessageBox.Show("Ошибка изменения строки\nПричина: " + e.Message);
+                if (e.Message.Contains("Incorrect date value: \'") &&
+                    e.Message.Contains("\' for column \'") &&
+                    e.Message.Contains("\' at row "))
+                    try
+                    {
+                        MySqlCommand command = new MySqlCommand(
+                        "UPDATE " + table + " SET " + column + "=STR_TO_DATE(\"" + value + "\",\"%d.%m.%Y 0:%i:%s\") WHERE " + primarykey + "=" + id,
+                        connection);
+                        if (command.ExecuteNonQuery() != 1)
+                            throw new Exception("Строки не существует в базе данных");
+                    }
+                    catch (Exception e1)
+                    {
+                        MessageBox.Show("Ошибка изменения строки\nПричина: " + e1.Message);
+                    }
+                else
+                    MessageBox.Show("Ошибка изменения строки\nПричина: " + e.Message);
             }
             Close();
             return false;
@@ -425,3 +430,58 @@ namespace BUS_ORGANIZATION
         }
     }
 }
+/*
+ * public bool UpdateRow(string table,string primarykey, string column, string id, string value)
+        {
+            try
+            {
+                if (!Open())
+                {
+                    return false;
+                }
+                try
+                {
+                    MySqlCommand command = new MySqlCommand(
+                        "UPDATE " + table + " SET " + column + "=" + value + " WHERE " + primarykey + "=" + id,
+                        connection);
+                    if (command.ExecuteNonQuery() != 1)
+                        throw new Exception("Строки не существует в базе данных");
+                }
+                catch (Exception e)
+                {
+                    if (e.Message.Contains("Unknown column \'") && e.Message.Contains("\' in \'field list\'") || )
+                    {
+                        try
+                        {
+                            MySqlCommand command = new MySqlCommand(
+                            "UPDATE " + table + " SET " + column + "=\"" + value + "\" WHERE " + primarykey + "=" + id,
+                            connection);
+                            if (command.ExecuteNonQuery() != 1)
+                                throw new Exception("Строки не существует в базе данных");
+                        }
+                        catch (Exception e1)
+                        {
+                            MessageBox.Show(e1.Message);
+                            MySqlCommand command = new MySqlCommand(
+                            "UPDATE " + table + " SET " + column + "=STR_TO_DATE(\"" + value + "\",\"%d.%m.%Y 0:%i:%s\") WHERE " + primarykey + "=" + id,
+                            connection);
+                            if (command.ExecuteNonQuery() != 1)
+                                throw new Exception("Строки не существует в базе данных");
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Ошибка изменения строки\nПричина: " + e.Message);
+                    }
+                }
+                Close();
+                return true;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Ошибка изменения строки\nПричина: " + e.Message);
+            }
+            Close();
+            return false;
+        }
+*/
